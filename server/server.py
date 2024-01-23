@@ -2,6 +2,7 @@ from flask import Flask,request,jsonify
 app = Flask(__name__)
 import logic
 
+#this is the method for getting all the location names
 @app.route('/get_location_names')
 def get_location_names():
     locations = logic.get_location_names()
@@ -9,6 +10,7 @@ def get_location_names():
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
+#this method is for predicting the price using the location,area,bhk and bathrooms
 @app.route('/predict_home_price',methods=['POST'])
 def predict_home_price():
     location = request.form['location']
@@ -16,8 +18,10 @@ def predict_home_price():
     bhk =  int(request.form['bhk'])
     bath = int(request.form['bath'])
 
+    estimated_price = logic.get_estimated_price(location,sqft,bhk,bath)
+
     response = jsonify({
-        "estimated price ": logic.get_estimated_price(location,sqft,bhk,bath)
+        "estimated price ": estimated_price
     })
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
