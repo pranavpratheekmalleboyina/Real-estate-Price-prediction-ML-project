@@ -19,8 +19,9 @@ def predict_home_price():
     response = jsonify({
         "estimated price ": logic.get_estimated_price(location,sqft,bhk,bath)
     })
+    response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 if __name__ == "__main__":
-    print("Running flask server for real estate price prediction")
-    app.run()
+    logic.load_artifact_names()
+    app.run(port=5050,debug=True)
